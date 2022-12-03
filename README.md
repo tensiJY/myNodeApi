@@ -1,9 +1,7 @@
-# 유데미 강의
-
-## 24 : REST API 작업 - 기본 개념
+# express
 
 ```
-https://github.com/tensiJY/node_api/tree/24-rest-api
+npm install express
 ```
 
-## 25 : REST API 작업 - 실용적인 애플리케이션 생성
+#
