@@ -1,3 +1,5 @@
+const Post = require(`../models/post`);
+
 exports.getPosts = (req, res, next) => {
   console.log(`getPosts`);
   res.status(200).json({
@@ -21,16 +23,26 @@ exports.createPost = (req, res, next) => {
   console.log(req.body);
   const { title, content } = req.body;
 
-  res.status(201).json({
-    message: `success`,
-    post: {
-      _id: new Date().toISOString(),
-      title: title,
-      content: content,
-      creator: {
-        name: `jyp`,
-      },
-      createAt: new Date(),
+  //  키 자동생성
+  const post = new Post({
+    title,
+    content,
+    creator: {
+      name: `park`,
     },
+    imageUrl: `images/1.jpg`,
   });
+  //  db 저장
+  post
+    .save()
+    .then((result) => {
+      console.log(result);
+      res.status(201).json({
+        message: `success`,
+        post: result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

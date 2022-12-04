@@ -22,19 +22,24 @@ app.use((req, res, next) => {
 });
 
 app.use(`/api`, apiRoutes);
-/*
+
 mongoose
   .connect(
-    "mongodb+srv://park:wndud58@cluster0.f7veanw.mongodb.net/messages?retryWrites=true&w=majority"
+    "mongodb+srv://:wndud58@cluster0.f7veanw.mongodb.net/messages?retryWrites=true&w=majority"
   )
   .then((result) => {
-    app.listen(8080, () => {
+    const server = app.listen(8080, () => {
       console.log(`server is listening >>> localhost:8080`);
+    });
+    const io = require(`socket.io`)(server);
+    io.on(`connection`, (socket) => {
+      console.log(`client connectd`);
     });
   })
   .catch((err) => console.log(err));
-*/
 
+/*
 app.listen(8080, () => {
   console.log(`server is listening >>> localhost:8080`);
 });
+*/
