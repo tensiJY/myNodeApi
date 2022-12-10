@@ -1,6 +1,6 @@
 const express = require(`express`);
 
-const { body } = require(`express-validator`);
+const { body, validationResult } = require(`express-validator`);
 const feedController = require(`../../../controllers/feedControllers`);
 
 const router = express.Router();
@@ -12,10 +12,19 @@ router.post(
     body(`title`).trim().isLength({ min: 3 }),
     body(`content`).trim().isLength({ min: 5 }),
   ],
-
+  (req, res, next) => {
+    console.log(`valid`);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //  에러처리
+      //  new Error() 새로운 error 객체를 생성
+      const error = new Error(`Validaton failed`);
+      error.statusCode = 422;
+      throw error;
+    }
+    next();
+  },
   feedController.createPost
 );
-
-router.get(`/post/:postId`, feedController.getPost);
 
 module.exports = router;
