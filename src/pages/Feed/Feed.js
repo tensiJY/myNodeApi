@@ -24,7 +24,7 @@ class Feed extends Component {
   BASE_URL = "http://localhost:8080";
 
   componentDidMount() {
-    fetch(`${this.BASE_URL}`)
+    fetch(`${this.BASE_URL}/api/feed/posts`)
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch user status.");
@@ -113,22 +113,23 @@ class Feed extends Component {
       editLoading: true,
     });
     // Set up data (with image!)
+    const formData = new FormData();
+    const keys = Object.keys(postData);
+    keys.forEach((item) => {
+      formData.append(item, postData[item]);
+    });
+
     let url = `${this.BASE_URL}/api/feed/post`;
+    /*
     if (this.state.editPost) {
       url = "URL";
-    }
+    }*/
 
     let method = "POST";
 
     fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-      },
       method: method,
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
