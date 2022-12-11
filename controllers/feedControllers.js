@@ -30,8 +30,16 @@ exports.createPost = (req, res, next) => {
     throw error;
   }
 
+  if (!req.file) {
+    const error = new Error(`no image provided.`);
+    error.statusCode = 422;
+    throw error;
+  }
+
   console.log("createPost");
   console.log(req.body);
+  console.log(req.file);
+  const imageUrl = req.file.path;
   const { title, content } = req.body;
 
   //  키 자동생성
@@ -41,7 +49,7 @@ exports.createPost = (req, res, next) => {
     creator: {
       name: `park`,
     },
-    imageUrl: `images/1.jpg`,
+    imageUrl: imageUrl,
   });
   //  db 저장
   post
