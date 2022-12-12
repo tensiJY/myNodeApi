@@ -1,6 +1,6 @@
-//const ApiError = require('../modules/ApiError');
+const logger = require('../modules/logger');
 const { getMessage } = require('../modules/message');
-const ApiError = require(`../modules/ApiError`);
+
 const users = [
   { id: `park`, name: `jy`, email: `` },
   { id: `kim`, name: `pp`, email: `` },
@@ -13,15 +13,18 @@ exports.findUser = (req, res) => {
 exports.saveUser = (req, res) => {
   const messageObj = getMessage('POST');
 
-  if (true) {
-    throw new ApiError(`!!!!`);
-  }
-
   return res.status(messageObj.status).json(messageObj);
 };
 
 exports.updateUser = (req, res) => {
   const messageObj = getMessage('PUT');
-
+  try {
+    asdff;
+  } catch (e) {
+    logger.error(`updateUser error`);
+    logger.error(e);
+    const type = e.type || `INTERNAL_SERVER_ERROR`;
+    next(e);
+  }
   return res.status(messageObj.status).json(messageObj);
 };
