@@ -1,3 +1,11 @@
+/*
+"@socket.io/cluster-adapter": "^0.2.1",
+    "@socket.io/redis-adapter": "^8.0.0",
+    "@socket.io/sticky": "^1.0.2",
+    "express": "^4.18.2",
+    "redis": "^4.5.1",
+    "socket.io": "^4.5.4"
+*/
 const cluster = require("cluster");
 const http = require("http");
 const { Server } = require("socket.io");
