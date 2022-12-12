@@ -22,14 +22,11 @@ exports.validError = (req, res, next) => {
   const error = validationResult(req);
 
   if (!error.isEmpty()) {
-    logger.info(`validError`);
-    logger.info(JSON.stringify(error));
-
+    //logger.error(`valid error \r\n` + JSON.stringify(error));
     const errors = error.array();
-    //const type = getMessage(errors[0].msg);
+    //const messageObj = getMessage(errors[0].msg);
     const type = errors[0].msg;
-    console.log(type);
-    const err = new Error(`input valid error`);
+    const err = new Error(`input valid error : ${type}`);
     err.type = type;
     throw err;
   }
