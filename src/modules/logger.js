@@ -30,6 +30,15 @@ const format = winston.format.combine(
   )
 );
 
+/**
+ * dev
+ *  info-> console, log
+ *  debug-> console
+ *
+ * prod
+ *  info -> log
+ *  debug -> 둘다 출력 안됨
+ */
 const logger = winston.createLogger({
   format,
   level: level(),
