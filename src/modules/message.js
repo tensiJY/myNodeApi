@@ -21,6 +21,12 @@ const CODE = {
     code: `-100`,
     message: `해당하는 페이지를 찾을 수가 없습니다`,
   },
+  INTERNAL_SERVER_ERROR: {
+    status: 500,
+    result: false,
+    code: `-101`,
+    message: `서버처리중 오류가 발생하였습니다`,
+  },
   VALID_EMAIL_EXISTS: {
     status: 400,
     result: false,
@@ -33,11 +39,17 @@ const CODE = {
     code: `-2`,
     message: `이메일을 입력해주시기 바랍니다`,
   },
+  USER_ID_DUPLICATED: {
+    status: 400,
+    result: false,
+    code: `-3`,
+    message: `아이디가 중복됩니다`,
+  },
 };
 
 module.exports = {
-  getMessage: (code, status = null) => {
-    const codeObj = CODE[code];
+  getMessage: (type, status = null) => {
+    const codeObj = CODE[type];
     return {
       ...codeObj,
       status: status || codeObj.status,
