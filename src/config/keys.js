@@ -1,6 +1,8 @@
 const path = require(`path`);
 const dotenv = require(`dotenv`);
 
+//const os = require(`os`);
+
 dotenv.config({
   path: path.join(__dirname, `/.env.${process.env.NODE_ENV}`),
 });
@@ -20,8 +22,10 @@ const DB_PASS = process.env.DB_PASS;
 //  logger
 const LOG_DIR = process.env.LOG_DIR;
 
-//  cpus
-const OS_CPUS = process.env.OS_CPUS;
+//const serverCpus = os.cpus().length;
+//const envCups = +process.env.OS_CPUS;
+//const OS_CPUS = envCups > serverCpus ? 1 : envCups;
+const OS_CPUS = +process.env.OS_CPUS || 2;
 
 module.exports = {
   nodeEnv: NODE_ENV,
