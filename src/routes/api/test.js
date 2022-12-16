@@ -46,19 +46,39 @@ router.get(`/users`, testController.findUser);
  */
 router.post(
   `/users`,
-  [...testValid.saveUser, validError],
+  [...testValid.saveUser],
+  validError,
   testController.saveUser
 );
 
 router.put(
   `/users`,
-  [...testValid.updateUser, validError],
+  [...testValid.updateUser],
   validError,
   testController.updateUser
 );
 
-router.get(`/400`, () => {});
+router.post(`/400`, (req, res, next) => {
+  //console.log(`call 400`);
+  try {
+    const err = new Error(`id duplicated`);
+    err.type = `USER_ID_DUPLICATED`;
+    throw err;
+  } catch (e) {
+    const type = e.type || `INTERNAL_SERVER_ERROR`;
+    next(e);
+  }
+});
 
-router.get(`/500`, () => {});
+router.put(`/500`, (req, res, next) => {
+  try {
+    asdfsdf;
+  } catch (e) {
+    // logger.error(`updateUser error`);
+    // logger.error(e);
+    const type = e.type || `INTERNAL_SERVER_ERROR`;
+    next(e);
+  }
+});
 
 module.exports = router;
