@@ -2,6 +2,9 @@ const express = require(`express`);
 const cors = require(`cors`);
 const helmet = require(`helmet`);
 
+const { robotTxt } = require(`../config/keys`);
+const robots = require(`express-robots-txt`);
+
 const morganMiddleware = require(`../middlewares/morganMiddleware`);
 
 const { swaggerUi, specs } = require('../modules/swagger');
@@ -27,6 +30,9 @@ module.exports = (http) => {
   };
 
   app.use(cors(corsConfig));
+
+  //  robots 설정
+  app.use(robots(robotTxt));
 
   //  form and json
   app.use(express.urlencoded({ extended: true }));
