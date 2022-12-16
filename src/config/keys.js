@@ -20,6 +20,9 @@ const DB_PASS = process.env.DB_PASS;
 //  logger
 const LOG_DIR = process.env.LOG_DIR;
 
+//  cpus
+const OS_CPUS = process.env.OS_CPUS;
+
 module.exports = {
   nodeEnv: NODE_ENV,
   isDev: isDev,
@@ -31,5 +34,8 @@ module.exports = {
   },
   log: {
     dir: LOG_DIR,
+  },
+  os: {
+    cpus: OS_CPUS,
   },
 };
