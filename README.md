@@ -2,41 +2,16 @@
 
 1. 환경설정 구성
 
-#### windows
-
-set process.env.NODE_ENV = production
-
-#### linux
-
-export NODE_ENV=production
+- 개발 : .env.development
+- 운영 : .env.production
 
 2. eslint + prettier 적용
 
 3. lib package
 
-- "body-parser": "^1.20.1",
-- "dotenv": "^16.0.3",
-- "express": "^4.18.2",
-- "morgan": "^1.10.0",
-- "nodemon": "^2.0.20",
-- "winston": "^3.8.2",
-- "winston-daily-rotate-file": "^4.7.1"
-
 # Node 실행
 
 ## run dev
-
-linux
-
-```
-export NODE_ENV=production
-```
-
-windows
-
-```
-set NODE_ENV=production
-```
 
 ```
 npm run dev
@@ -94,12 +69,6 @@ npm install eslint-plugin-prettier --save-dev
 npm i dotenv --save
 ```
 
-## body-parser
-
-```
-npm install body-parser --save
-```
-
 ## logger
 
 winston : 로그 파일 및 로그 레벨 관리 모듈
@@ -126,4 +95,22 @@ swagger-ui-express: swagger-ui와 express를 연결하기 위해 사용
 
 ```
 npm install swagger-jsdoc swagger-ui-express --save-dev
+```
+
+## cors
+
+## robots
+
+https://www.npmjs.com/package/express-robots-txt
+
+```
+npm i express-robots-txt
+```
+
+## multer
+
+file upload
+
+```
+npm install
 ```
