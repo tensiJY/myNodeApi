@@ -35,7 +35,7 @@ if (cluster.isMaster) {
     logger.debug(`${nodeEnv} server is listening >>> localhost:${port}`);
   });
 
-  const workerLength = +os.cpus || 4;
+  const workerLength = os.cpus;
 
   for (let i = 0; i < workerLength; i++) {
     cluster.fork();
