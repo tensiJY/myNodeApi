@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./src/app.js",
-    "dev": "NODE_ENV=development nodemon ./src/app.js"
+    "mac start": "NODE_ENV=production node ./src/app.js",
+    "mac dev": "NODE_ENV=development nodemon ./src/app.js",
+    "start": "set \"NODE_ENV=production\" && node ./src/app.js",
+    "dev": " set \"NODE_ENV=development\" && nodemon ./src/app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -17,7 +19,9 @@
     "nodemon": "^2.0.20",
     "socket.io": "^4.5.4",
     "winston": "^3.8.2",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^4.7.1",
+    "@socket.io/cluster-adapter": "^0.2.1",
+    "@socket.io/sticky": "^1.0.2"    
   },
   "devDependencies": {
     "eslint": "^8.28.0",
