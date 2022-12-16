@@ -7,6 +7,8 @@ dotenv.config({
   path: path.join(__dirname, `/.env.${process.env.NODE_ENV}`),
 });
 
+const ROBOT_TXT = path.join(__dirname, `/robots.txt`);
+
 //  개발모드인경우 : 개발 true, 운영 : false
 const NODE_ENV = process.env.NODE_ENV || `development`;
 const isDev = NODE_ENV === `development`;
@@ -42,4 +44,5 @@ module.exports = {
   os: {
     cpus: OS_CPUS,
   },
+  robotTxt: ROBOT_TXT,
 };
