@@ -1,5 +1,7 @@
 const Post = require(`../models/post`);
 const { validationResult } = require(`express-validator`);
+const fs = require(`fs`);
+const path = require(`path`);
 
 exports.getPosts = (req, res, next) => {
   console.log(`getPosts`);
@@ -87,6 +89,90 @@ exports.getPost = (req, res, next) => {
       res.status(200).json({
         message: `success`,
         post: result,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.updatePost = (req, res, next) => {
+  const { postId } = req.params;
+  const { title, content } = req.body;
+  let { image: imageUrl } = req.body;
+  if (req.file) {
+    imageUrl = req.file.path;
+  }
+
+  if (!imageUrl) {
+    const error = new Error(`No filed picked.`);
+    error.statusCode = 422;
+    throw error;
+  }
+
+  console.log(`updatePost postId : ${postId}`);
+
+  Post.findById(postId)
+    .then((post) => {
+      if (!post) {
+        const error = new Error(`could not find post.`);
+        error.statusCode = 404;
+        throw error;
+      }
+      //  저장하기 이전에 이미지 경로가 이전 게시물에 저장했던 이미지인지 확인
+      if (imageUrl !== post.imageUrl) {
+        clearImage(post.imageUrl);
+      }
+
+      post.title = title;
+      post.imageUrl = imageUrl;
+      post.content = content;
+      return post.save();
+    })
+    .then((result) => {
+      //  새 리소스를 생성하지 않았으므로 200
+      res.status(200).json({
+        message: "Post updated!",
+        post: result,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+const clearImage = (filePath) => {
+  //  상위 폴더로 감
+  filePath = path.join(__dirname, "../../", filePath);
+  fs.unlink(filePath, (err) => {
+    console.log(`filePath : ${filePath}`);
+    console.log(err);
+  });
+};
+
+exports.deletePost = (req, res, next) => {
+  const { postId } = req.params;
+  Post.findById(postId)
+    .then((post) => {
+      if (!post) {
+        const error = new Error(`could not find post.`);
+        error.statusCode = 404;
+        throw error;
+      }
+      //  check logged in user
+      clearImage(post.imageUrl);
+      return Post.findByIdAndRemove(postId);
+    })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: "Delete post",
       });
     })
     .catch((err) => {

@@ -1,7 +1,7 @@
 const express = require(`express`);
 
 const { body } = require(`express-validator`);
-const feedController = require(`../../../controllers/feedControllers`);
+const feedController = require(`../../../controllers/feedController`);
 
 const router = express.Router();
 //  라우터에서 컨트롤러 실행s
@@ -17,5 +17,9 @@ router.post(
 );
 
 router.get(`/post/:postId`, feedController.getPost);
+
+router.put(`/post/:postId`, feedController.updatePost);
+
+router.delete(`/post/:postId`, feedController.deletePost);
 
 module.exports = router;
