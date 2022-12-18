@@ -1,7 +1,7 @@
 const express = require(`express`);
 
 const { body } = require(`express-validator`);
-const feedController = require(`../../../controllers/feedController`);
+const feedController = require(`../../controllers/feedController`);
 
 const router = express.Router();
 //  라우터에서 컨트롤러 실행s
