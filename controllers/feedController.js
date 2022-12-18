@@ -5,6 +5,34 @@ const path = require(`path`);
 
 exports.getPosts = (req, res, next) => {
   console.log(`getPosts`);
+  //  현재 페이지 : 기본값 1
+  const currentPage = req.query.page || 1;
+  const perPage = 2;
+  let totalItems;
+
+  //  데이터의 총 갯수를 확인
+  Post.find()
+    .countDocuments()
+    .then((count) => {
+      totalItems = count;
+      return Post.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
+    .then((posts) => {
+      res.status(200).json({
+        message: `success`,
+        posts: posts,
+        totalItems: totalItems,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+  /*
   Post.find()
     .then((result) => {
       res.status(200).json({
@@ -18,6 +46,7 @@ exports.getPosts = (req, res, next) => {
       }
       next(err);
     });
+    */
 };
 
 exports.createPost = (req, res, next) => {
