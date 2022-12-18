@@ -53,7 +53,7 @@ class Feed extends Component {
       this.setState({ postPage: page });
     }
     //  post 목록 불러오기
-    fetch(`${this.BASE_URL}/api/feed/posts`)
+    fetch(`${this.BASE_URL}/api/feed/posts?page=${page}`)
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch posts.");
