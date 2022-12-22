@@ -58,12 +58,29 @@ app.use((err, req, res, next) => {
   console.log(err);
   const status = err.statusCode || 500;
   const message = err.message;
+  const data = err.data;
   res.status(status).json({
     message: message,
     path: req.path,
+    data: data,
   });
 });
 //
+/*
+mongoose
+  .connect("mongodb://localhost:27017/message")
+  .then((result) => {
+    const server = app.listen(8080, () => {
+      console.log(`server is listening >>> localhost:8080`);
+    });
+    const io = require(`socket.io`)(server);
+    io.on(`connection`, (socket) => {
+      console.log(`client connectd`);
+    });
+  })
+  .catch((err) => console.log(err));
+*/
+/*
 mongoose
   .connect(
     "mongodb+srv://park:wndud58@cluster0.f7veanw.mongodb.net/messages?retryWrites=true&w=majority"
@@ -78,9 +95,8 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+*/
 
-/*
 app.listen(8080, () => {
   console.log(`server is listening >>> localhost:8080`);
 });
-*/
