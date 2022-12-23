@@ -38,3 +38,9 @@ npm install --save nodemon
 "express": "^4.18.2",
 "nodemon": "^2.0.20"
 }
+
+## 비밀번호 해시화
+
+```
+npm install --save bcryptjs
+```
