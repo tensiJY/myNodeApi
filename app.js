@@ -80,7 +80,7 @@ mongoose
   })
   .catch((err) => console.log(err));
 */
-/*
+
 mongoose
   .connect(
     "mongodb+srv://park:wndud58@cluster0.f7veanw.mongodb.net/messages?retryWrites=true&w=majority"
@@ -95,8 +95,9 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-*/
 
+/*
 app.listen(8080, () => {
   console.log(`server is listening >>> localhost:8080`);
 });
+*/
