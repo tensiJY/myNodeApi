@@ -4,6 +4,8 @@ const { validationResult } = require(`express-validator`);
 
 const bcrypt = require(`bcryptjs`);
 
+const jwt = require(`jsonwebtoken`);
+
 exports.singup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -39,6 +41,60 @@ exports.singup = (req, res, next) => {
     .catch((err) => {
       console.log(`create post : err`);
       //  서버측 오류 이므로 코드가 없으면,
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      //  next으로 에러처리로 이동
+      next(err);
+    });
+};
+
+exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  let loadedUser;
+  User.findOne({ email: email })
+    .then((user) => {
+      if (!user) {
+        //  404 : 해당하는 값이 없음
+        //  401 : 인증되지 않음
+        const error = new Error(`사용자가 없습니다`);
+        error.statusCode = 401;
+        throw error;
+      }
+
+      loadedUser = user;
+      return bcrypt.compare(password, loadedUser.password);
+    })
+    .then((isEqual) => {
+      if (!isEqual) {
+        const error = new Error(`비밀번호가 일치하지 않습니다`);
+        error.statusCode = 401;
+        throw error;
+      }
+      //console.log(loadedUser);
+      //console.log(loadedUser._id);
+      //  비밀번호 일치
+      //  토큰 생성
+      const token = jwt.sign(
+        {
+          email: loadedUser.email,
+          userId: loadedUser._id.toString(),
+        },
+        `key123456789`,
+        {
+          expiresIn: `1h`,
+        }
+      );
+      console.log(`token : ${token}`);
+      res.status(200).json({
+        message: `로그인 성공`,
+        token,
+        userId: loadedUser._id.toString(),
+      });
+    })
+    .catch((err) => {
+      //  db 혹은 서버 오류
+      //  서버측 오류 이므로 코드가 없으면
       if (!err.statusCode) {
         err.statusCode = 500;
       }

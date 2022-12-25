@@ -68,8 +68,8 @@ exports.createPost = (req, res, next) => {
   }
 
   console.log("createPost");
-  console.log(req.body);
-  console.log(req.file);
+  //console.log(req.body);
+  //console.log(req.file);
   const imageUrl = req.file.path;
   const { title, content } = req.body;
 
@@ -77,9 +77,7 @@ exports.createPost = (req, res, next) => {
   const post = new Post({
     title,
     content,
-    creator: {
-      name: `park`,
-    },
+    creator: req.userId,
     imageUrl: imageUrl,
   });
   //  db 저장
