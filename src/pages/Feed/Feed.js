@@ -24,7 +24,11 @@ class Feed extends Component {
   BASE_URL = "http://localhost:8080";
 
   componentDidMount() {
-    fetch(`${this.BASE_URL}/api/feed/posts`)
+    fetch(`${this.BASE_URL}/api/feed/posts`, {
+      headers: {
+        Authorization: `Bearer ${this.props.token}`,
+      },
+    })
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch user status.");
