@@ -1,7 +1,10 @@
-const Post = require(`../models/post`);
 const { validationResult } = require(`express-validator`);
 const fs = require(`fs`);
 const path = require(`path`);
+
+//  게시물과 사용자 연결
+const Post = require(`../models/post`);
+const User = require(`../models/user`);
 
 exports.getPosts = (req, res, next) => {
   console.log(`getPosts`);
@@ -32,21 +35,6 @@ exports.getPosts = (req, res, next) => {
       }
       next(err);
     });
-  /*
-  Post.find()
-    .then((result) => {
-      res.status(200).json({
-        message: `success`,
-        posts: result,
-      });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
-    */
 };
 
 exports.createPost = (req, res, next) => {
@@ -72,7 +60,7 @@ exports.createPost = (req, res, next) => {
   //console.log(req.file);
   const imageUrl = req.file.path;
   const { title, content } = req.body;
-
+  //console.log(req.userId);
   //  키 자동생성
   const post = new Post({
     title,
@@ -80,14 +68,27 @@ exports.createPost = (req, res, next) => {
     creator: req.userId,
     imageUrl: imageUrl,
   });
-  //  db 저장
+
+  let creator;
+  //  db 저장 -> 게시물과 사용자 연결
   post
     .save()
     .then((result) => {
-      console.log(result);
+      return User.findById(req.userId);
+    })
+    .then((user) => {
+      creator = user;
+      user.posts.push(post);
+      return user.save();
+    })
+    .then((result) => {
       res.status(201).json({
         message: `success`,
-        post: result,
+        post: post,
+        creator: {
+          _id: creator._id,
+          name: creator.name,
+        },
       });
     })
     .catch((err) => {
@@ -149,6 +150,13 @@ exports.updatePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+      //  작성자 확인 > 토큰과 비교
+      if (req.userId !== post.creator.toString()) {
+        const error = new Error(`Not authorized!`);
+        error.statusCode = 403;
+        throw error;
+      }
+
       //  저장하기 이전에 이미지 경로가 이전 게시물에 저장했던 이미지인지 확인
       if (imageUrl !== post.imageUrl) {
         clearImage(post.imageUrl);
@@ -176,7 +184,7 @@ exports.updatePost = (req, res, next) => {
 
 const clearImage = (filePath) => {
   //  상위 폴더로 감
-  filePath = path.join(__dirname, "../../", filePath);
+  filePath = path.join(__dirname, "../", filePath);
   fs.unlink(filePath, (err) => {
     console.log(`filePath : ${filePath}`);
     console.log(err);
@@ -192,12 +200,27 @@ exports.deletePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+
+      //  작성자 확인 > 토큰과 비교
+      if (req.userId !== post.creator.toString()) {
+        const error = new Error(`Not authorized!`);
+        error.statusCode = 403;
+        throw error;
+      }
       //  check logged in user
       clearImage(post.imageUrl);
       return Post.findByIdAndRemove(postId);
     })
     .then((result) => {
-      console.log(result);
+      return User.findById(req.userId);
+    })
+    .then((user) => {
+      //  게시물과 사용자의 관계 -> 사용자 스키마의 게시물 아이디 삭제
+      //  pull 메서드를 사용
+      user.posts.pull(postId);
+      return user.save();
+    })
+    .then((result) => {
       res.status(200).json({
         message: "Delete post",
       });

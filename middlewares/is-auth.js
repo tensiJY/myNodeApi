@@ -34,5 +34,7 @@ module.exports = (req, res, next) => {
 
   //  인증 성공
   req.userId = decodedToken.userId;
+  console.log(`req.userId : ${req.userId}`);
+  console.log(`decodedToken : ${decodedToken.userId}`);
   next();
 };
