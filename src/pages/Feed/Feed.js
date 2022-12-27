@@ -9,6 +9,8 @@ import Loader from "../../components/Loader/Loader";
 import ErrorHandler from "../../components/ErrorHandler/ErrorHandler";
 import "./Feed.css";
 
+import openSocket from "socket.io-client";
+
 class Feed extends Component {
   state = {
     isEditing: false,
@@ -41,7 +43,30 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
+    const socket = openSocket(`${this.BASE_URL}`);
+    socket.on(`posts`, (data) => {
+      console.log(data);
+      if (data.action === "create") {
+        this.addPost(data.post);
+      }
+    });
   }
+
+  addPost = (post) => {
+    this.setState((prevState) => {
+      const updatedPosts = [...prevState.posts];
+      if (prevState.postPage === 1) {
+        //  맨 뒤에 인덱스의 값 제거
+        updatedPosts.pop();
+        //  맨 앞 인덱스에 끼워넣기
+        updatedPosts.unshift(post);
+      }
+      return {
+        posts: updatedPosts,
+        totalPosts: prevState.totalPosts + 1,
+      };
+    });
+  };
 
   loadPosts = (direction) => {
     if (direction) {
@@ -168,9 +193,11 @@ class Feed extends Component {
               (p) => p._id === prevState.editPost._id
             );
             updatedPosts[postIndex] = post;
-          } else if (prevState.posts.length < 2) {
+          }
+          /*else if (prevState.posts.length < 2) {
             updatedPosts = prevState.posts.concat(post);
           }
+          */
           return {
             posts: updatedPosts,
             isEditing: false,
