@@ -8,7 +8,6 @@ const server = require(`./loaders/serverLoader`);
 
 const { setupMaster, setupWorker } = require(`@socket.io/sticky`);
 const { createAdapter, setupPrimary } = require(`@socket.io/cluster-adapter`);
-const { Server } = require(`socket.io`);
 
 //  클러스터 : 마스터
 if (cluster.isMaster) {
@@ -49,16 +48,9 @@ if (cluster.isMaster) {
   logger.debug(`Worker ${process.pid} started`);
 
   const httpServer = server(http);
-
-  const io = new Server(httpServer, {
-    cors: {
-      origin: '*',
-    },
-  });
+  const io = require(`./loaders/socketLoader`).init(httpServer);
 
   io.adapter(createAdapter());
 
   setupWorker(io);
-
-  require(`./loaders/socketLoader`)(io);
 }
