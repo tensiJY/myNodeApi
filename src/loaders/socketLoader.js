@@ -1,5 +1,6 @@
 const { Server } = require(`socket.io`);
 const socket = require(`../modules/socket`);
+const logger = require(`../modules/logger`);
 
 let io, drv, mgr;
 
