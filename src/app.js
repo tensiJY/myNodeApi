@@ -1,4 +1,4 @@
-const { port, nodeEnv, os } = require(`./config/keys`);
+const { PORT, NODE_ENV, OS_CPUS } = require(`./config/keys`);
 const cluster = require(`cluster`);
 const logger = require(`./modules/logger`);
 
@@ -30,11 +30,11 @@ if (cluster.isMaster) {
     serialization: 'advanced',
   });
 
-  httpServer.listen(port, () => {
-    logger.debug(`${nodeEnv} server is listening >>> localhost:${port}`);
+  httpServer.listen(PORT, () => {
+    logger.debug(`${NODE_ENV} server is listening >>> localhost:${PORT}`);
   });
 
-  const workerLength = os.cpus;
+  const workerLength = OS_CPUS;
 
   for (let i = 0; i < workerLength; i++) {
     cluster.fork();
