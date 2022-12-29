@@ -1,7 +1,6 @@
 const winston = require('winston');
 const winstonDaily = require('winston-daily-rotate-file');
-const { log, isDev } = require(`../config/keys`);
-const { dir: logDir } = log;
+const { LOG_DIR, isDev } = require(`../config/keys`);
 
 /*
  * Log Level
@@ -23,7 +22,7 @@ winston.addColors(colors);
 */
 
 const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:MM:SS ||' }),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss ||' }),
   //winston.format.colorize({ all: true }),
   winston.format.printf(
     (info) => `${info.timestamp} [ ${info.level} ] ▶ ${info.message}`
@@ -46,8 +45,8 @@ const logger = winston.createLogger({
     new winstonDaily({
       level: 'info',
       datePattern: 'YYYY-MM-DD',
-      dirname: logDir,
-      filename: `%DATE%.log`,
+      dirname: `${LOG_DIR}/info`,
+      filename: `%DATE%.Log`,
       zippedArchive: true,
       handleExceptions: true,
       maxFiles: 30,
@@ -55,11 +54,21 @@ const logger = winston.createLogger({
     new winstonDaily({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/error',
-      filename: `%DATE%.error.log`,
+      dirname: `${LOG_DIR}/error`,
+      filename: `%DATE%.Log`,
       zippedArchive: true,
       maxFiles: 30,
     }),
+    /*
+    new winstonDaily({
+      level: 'debug',
+      datePattern: 'YYYY-MM-DD',
+      dirname: `${LOG_DIR}/debug`,
+      filename: `%DATE%.Log`,
+      zippedArchive: true,
+      maxFiles: 30,
+    }),
+    */
     new winston.transports.Console({
       handleExceptions: true,
     }),
