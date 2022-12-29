@@ -2,7 +2,7 @@ const express = require(`express`);
 const cors = require(`cors`);
 const helmet = require(`helmet`);
 
-const { robotTxt } = require(`../config/keys`);
+const { ROBOT_TXT } = require(`../config/keys`);
 const robots = require(`express-robots-txt`);
 
 const morganMiddleware = require(`../middlewares/morganMiddleware`);
@@ -32,7 +32,7 @@ module.exports = (http) => {
   app.use(cors(corsConfig));
 
   //  robots 설정
-  app.use(robots(robotTxt));
+  app.use(robots(ROBOT_TXT));
 
   //  form and json
   app.use(express.urlencoded({ extended: true }));
@@ -49,6 +49,8 @@ module.exports = (http) => {
 
   //  catch 404
   app.use(errorPageNotFound);
+
+  //  catch
   app.use(errorHandler);
 
   return server;
