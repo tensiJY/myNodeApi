@@ -4,16 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "mac-start": "NODE_ENV=production node ./src/app.js",
-    "mac-dev": "NODE_ENV=development nodemon ./src/app.js",
-    "start": "set \"NODE_ENV=production\" && node ./src/app.js",
-    "dev": " set \"NODE_ENV=development\" && nodemon ./src/app.js"
+    "start": "cross-env NODE_ENV=production node ./src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/app.js"
   },
   "dependencies": {
     "@socket.io/cluster-adapter": "^0.2.1",
     "@socket.io/sticky": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-robots-txt": "^1.0.0",
