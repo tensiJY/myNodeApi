@@ -170,3 +170,111 @@ npm install --global node-gyp
   INFO 각 펑션의 진입/진출 기록
   DEBUG 함수내의 데이터 변경 기록
   ERR 함수내의 에러 및 Catch 에러 기록
+
+  - Unit 테스트
+
+1. 통신허브, 빌더, 통신드라이버 Unit 테스트 검증 적용
+   검증툴 : Mocha 툴 적용
+   테스트 프레임워크 : Mocha
+   테스트 결과와 조건을 정의 : Chai /
+   부작용 관리을 관리하고, 외부 디펜던시나 복잡한 시나리오를 다룰 때에는 Sinon
+
+- 확인사항 : 범위 지정해야함
+
+- 테스트 시나리오 작성 필요
+
+2. SI 매니저 - 웹 성능검사를 위한 툴 적용을 해야합니다
+   웹 성능 평가 : Artillery(아틸러리) 적용
+
+참고
+duration 은 테스트 진행 시간을 가르키고 rate 는 초당 요청을 의미하며 n 은 동시 접속 수를 의미한다.
+즉 60초 동안 초당 10초, 동시 접속은 20으로 하여 테스트를 진행한다는 것이다
+
+https://blog.outsider.ne.kr/1238
+https://blog.sonim1.com/234
+https://blog.hax0r.info/2020-04-19/stress-test-in-node-with-artillery/
+
+- 실행파일로 빌드
+  Node.js가 설치되어 있지 않은 환경에서 Node.js로 작성된 App을 실행시키려면,
+  Standalone(독립형) 형태의 실행 파일로 배포하는 것이 유용합니다.
+
+pkg 모듈을 사용하여 Node.js 런타임을 바이너리 실행파일(.exe)로 패키징이 가능합니다.
+
+패키징 된 exe 파일은 Node.js가 설치되어 있지 않은 환경에서 실행할 수 있습니다.
+
+참고
+https://www.npmjs.com/package/pkg
+
+# pkg 모듈 글로벌 설치
+
+npm install pkg -g
+
+# 실행파일(.exe) 생성
+
+# -t 옵션 설정을 통해 Node.js 버전, OS, Bit 수를 지정할 수 있습니다.
+
+pkg [파일] -t node10-win-x64
+
+## cross-env
+
+- https://www.npmjs.com/package/cross-env
+
+```
+npm install --save cross-env
+```
+
+```
+{
+  "scripts": {
+    "build": "cross-env FIRST_ENV=one SECOND_ENV=two node ./my-program"
+  }
+}
+```
+
+## 보안모듈 헬멧 적용
+
+```
+npm install helmet --save
+```
+
+```
+const express = require("express");
+const helmet = require("helmet"); // 모듈 선언
+const app = express();
+app.use(helmet()); // 보안 기능 설정 완료
+```
+
+참고
+https://www.npmjs.com/package/helmet
+https://velog.io/@devjooj/NodeJS-EP-1.-%EB%B3%B4%EC%95%88-%EB%AA%A8%EB%93%88-helmet
+
+## 에셋 압축
+
+- css, js 압축
+
+```
+npm install --save compression
+```
+
+```
+var compression = require('compression')
+var express = require('express')
+
+var app = express()
+
+// compress all responses
+app.use(compression())
+
+// add all routes
+
+```
+
+참고
+
+- https://github.com/expressjs/compression
+
+## 모건
+
+```
+npm install --save morgan
+```
