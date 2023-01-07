@@ -66,9 +66,9 @@ app.use((err, req, res, next) => {
   });
 });
 //
-/*
+
 mongoose
-  .connect("mongodb://localhost:27017/message")
+  .connect("mongodb://localhost:27017/messages")
   .then((result) => {
     const server = app.listen(8080, () => {
       console.log(`server is listening >>> localhost:8080`);
@@ -79,8 +79,8 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-*/
 
+/*
 mongoose
   .connect(
     "mongodb+srv://park:wndud58@cluster0.f7veanw.mongodb.net/messages?retryWrites=true&w=majority"
@@ -95,6 +95,7 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+*/
 
 /*
 app.listen(8080, () => {

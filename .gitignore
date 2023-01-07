@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+# mocha - report
+/test-report
 
 # misc
 .DS_Store
