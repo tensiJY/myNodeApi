@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require(`../../models/user`);
 const authController = require(`../../controllers/authController`);
 
+const isAuth = require("../../middlewares/is-auth");
+
 //  사용자 등록 -> put
 router.put(
   `/signup`,
@@ -32,5 +34,7 @@ router.put(
 );
 
 router.post(`/login`, authController.login);
+
+router.get("/status", isAuth, authController.getUserStatus);
 
 module.exports = router;
