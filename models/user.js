@@ -16,7 +16,7 @@ const userSchema = new Schema({
   },
   status: {
     type: String,
-    default: "I am New!",
+    default: "I am new!",
   },
   //  사용자의 게시물에 참조를 저장
   posts: [

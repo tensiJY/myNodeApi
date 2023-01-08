@@ -150,6 +150,8 @@ exports.getUserStatus = async (req, res, next) => {
     res.status(200).json({ status: user.status });
   } catch (err) {
     if (!err.statusCode) {
+      console.log(`authController error`);
+      console.log(err);
       err.statusCode = 500;
     }
     next(err);

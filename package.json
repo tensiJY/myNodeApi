@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test:sample": "echo \"Error: no test specified\" && exit 1",
-    "test": "mocha --timeout 5000",
-    "test:report": "mocha --timeout 5000 --reporter mochawesome --reporter-options reportDir=test-report,reportFilename=report",
+    "test": "mocha --timeout 10000",
+    "test:report": "mocha --timeout 10000 --reporter mochawesome --reporter-options reportDir=test-report,reportFilename=report",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js"
   },

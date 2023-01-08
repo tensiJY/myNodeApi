@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
     //  토큰의 유효성을 확인
     decodedToken = jwt.verify(token, "key123456789");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     //  미들웨어가 있기 때문에 -> express.js 오류 핸들링이 이어 받는다.
     //  malformed, signature 에러 등
     err.statusCode = 500;
@@ -34,7 +34,7 @@ module.exports = (req, res, next) => {
 
   //  인증 성공
   req.userId = decodedToken.userId;
-  console.log(`req.userId : ${req.userId}`);
-  console.log(`decodedToken : ${decodedToken.userId}`);
+  //console.log(`req.userId : ${req.userId}`);
+  //console.log(`decodedToken : ${decodedToken.userId}`);
   next();
 };
