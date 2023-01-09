@@ -1,4 +1,4 @@
-const { PORT, NODE_ENV, OS_CPUS } = require(`./config/keys`);
+const { PORT, NODE_ENV, OS_CPUS, MONGO } = require(`./config/keys`);
 const cluster = require(`cluster`);
 const logger = require(`./modules/logger`);
 
@@ -9,48 +9,56 @@ const server = require(`./loaders/serverLoader`);
 const { setupMaster, setupWorker } = require(`@socket.io/sticky`);
 const { createAdapter, setupPrimary } = require(`@socket.io/cluster-adapter`);
 
-//  클러스터 : 마스터
-if (cluster.isMaster) {
-  logger.debug(`Master : ${process.pid} is running`);
+const mongoose = require(`mongoose`);
 
-  const httpServer = http.createServer();
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(MONGO.URL, MONGO.OPTIONS)
+  .then(() => {
+    //  클러스터 : 마스터
+    if (cluster.isMaster) {
+      logger.debug(`Master : ${process.pid} is running`);
 
-  setupMaster(httpServer, {
-    loadBalancingMethod: 'least-connection',
-  });
+      const httpServer = http.createServer();
 
-  setupPrimary();
+      setupMaster(httpServer, {
+        loadBalancingMethod: 'least-connection',
+      });
 
-  //  Node.js < 16.0.0
-  //cluster.setupMaster({
-  //  serialization: "advanced",
-  //});
-  // Node.js > 16.0.0
-  cluster.setupPrimary({
-    serialization: 'advanced',
-  });
+      setupPrimary();
 
-  httpServer.listen(PORT, () => {
-    logger.debug(`${NODE_ENV} server is listening >>> localhost:${PORT}`);
-  });
+      //  Node.js < 16.0.0
+      //cluster.setupMaster({
+      //  serialization: "advanced",
+      //});
+      // Node.js > 16.0.0
+      cluster.setupPrimary({
+        serialization: 'advanced',
+      });
 
-  const workerLength = OS_CPUS;
+      httpServer.listen(PORT, () => {
+        logger.debug(`${NODE_ENV} server is listening >>> localhost:${PORT}`);
+      });
 
-  for (let i = 0; i < workerLength; i++) {
-    cluster.fork();
-  }
+      const workerLength = OS_CPUS;
 
-  cluster.on(`exit`, (worker) => {
-    logger.debug(`Worker ${worker.process.pid} died`);
-    cluster.fork();
-  });
-} else {
-  logger.debug(`Worker ${process.pid} started`);
+      for (let i = 0; i < workerLength; i++) {
+        cluster.fork();
+      }
 
-  const httpServer = server(http);
-  const io = require(`./loaders/socketLoader`).init(httpServer);
+      cluster.on(`exit`, (worker) => {
+        logger.debug(`Worker ${worker.process.pid} died`);
+        cluster.fork();
+      });
+    } else {
+      logger.debug(`Worker ${process.pid} started`);
 
-  io.adapter(createAdapter());
+      const httpServer = server(http);
+      const io = require(`./loaders/socketLoader`).init(httpServer);
 
-  setupWorker(io);
-}
+      io.adapter(createAdapter());
+
+      setupWorker(io);
+    }
+  })
+  .catch((err) => logger.error(err));
