@@ -18,6 +18,9 @@ const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 
+//  몽고
+const MONGO_URL = process.env.MONGO_URL;
+
 //const serverCpus = os.cpus().length;
 //const envCups = +process.env.OS_CPUS;
 //const OS_CPUS = envCups > serverCpus ? 1 : envCups;
@@ -25,7 +28,7 @@ const DB_PASS = process.env.DB_PASS;
 module.exports = {
   NODE_ENV: NODE_ENV,
   isDev: isDev,
-  PORT: +process.env.PORT || 80,
+  PORT: +process.env.PORT || 8080,
   DB_HOST: DB_HOST,
   DB_USER: DB_USER,
   DB_PASS: DB_PASS,
@@ -33,4 +36,11 @@ module.exports = {
   OS_CPUS: +process.env.OS_CPUS || 2,
   ROBOT_TXT: ROBOT_TXT,
   AES_KEY: process.env.AES_KEY,
+  MONGO: {
+    URL: MONGO_URL,
+    OPTIONS: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  },
 };
