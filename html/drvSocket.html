@@ -20,7 +20,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const socket = io(`http://localhost/drv`);
+    const socket = io(`http://localhost:8080/drv`);
     socket.on(`enter`, (data) => {
       console.log(data);
       var obj = JSON.parse(data);
@@ -34,7 +34,10 @@
     //socket.emit("setMsg", JSON.stringify({ data: "pppp" }));
 
     const btn = document.getElementById(`btn`);
-    btn.addEventListener('click', (e) => {
+
+    btn.addEventListener('click', setMsgEvent);
+
+    const setMsgEvent = (e) => {
       const target = document.getElementById('msg');
       const msg = target.value;
       console.log(msg);
@@ -45,7 +48,7 @@
         })
       );
       target.value = '';
-    });
+    };
 
     socket.on(`getMsg`, (data) => {
       console.log(data);
