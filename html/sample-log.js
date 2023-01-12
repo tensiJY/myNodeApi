@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const sampleLogSchema = new Schema(
   {
-    name: {
+    socket_id: {
       type: String,
       required: true,
     },
@@ -11,9 +11,15 @@ const sampleLogSchema = new Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-//module.exports = mongoose.model('Log', sampleLogSchema, 'log');
-module.exports = mongoose.model('Log', sampleLogSchema);
+//  3번째 인자로 사용할 스키마를 정의한다,
+//  인자가 2개이면, logs로 된다
+module.exports = mongoose.model('Log', sampleLogSchema, 'log');
+//module.exports = mongoose.model('Log', sampleLogSchema);
