@@ -9,8 +9,6 @@ import Loader from "../../components/Loader/Loader";
 import ErrorHandler from "../../components/ErrorHandler/ErrorHandler";
 import "./Feed.css";
 
-import openSocket from "socket.io-client";
-
 class Feed extends Component {
   state = {
     isEditing: false,
@@ -43,17 +41,6 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
-    const socket = openSocket(`${this.BASE_URL}`);
-    socket.on(`posts`, (data) => {
-      console.log(data);
-      if (data.action === "create") {
-        this.addPost(data.post);
-      } else if (data.action === "update") {
-        this.updatePost(data.post);
-      } else if (data.action === "delete") {
-        this.loadPosts();
-      }
-    });
   }
 
   addPost = (post) => {
