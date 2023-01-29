@@ -1,0 +1,21 @@
+{
+  "plugins": ["prettier"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    // 모듈 export를 위해 import, export를 사용 가능여부를 설정, script는 사용불가
+    "sourceType": "script",
+    "ecmaFeatures": {
+      "jsx": false
+    }
+  },
+
+  "env": {
+    "browser": false,
+    "node": true
+  },
+  "ignorePatterns": ["node_modules/"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

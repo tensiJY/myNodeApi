@@ -3,7 +3,11 @@ const mongoose = require(`mongoose`);
 const path = require(`path`);
 const multer = require(`multer`);
 
-const apiRoutes = require(`./routes/api`);
+//  graphql
+const { createHandler } = require('graphql-http/lib/use/express');
+
+const graphqlSchmea = require(`./graphql/schema`);
+const graphqlResolver = require(`./graphql/resolvers`);
 
 const app = express();
 
@@ -23,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //  정적 자원 활용
-console.log(path.join(__dirname, `images`));
+//console.log(path.join(__dirname, `images`));
 
 //  파일 저장 제어
 const fileStorage = multer.diskStorage({
@@ -51,7 +55,13 @@ app.use(
 );
 app.use(`/images`, express.static(path.join(__dirname, `images`)));
 
-app.use(`/api`, apiRoutes);
+app.use(
+  `/graphql`,
+  createHandler({
+    schema: graphqlSchmea,
+    rootValue: graphqlResolver,
+  })
+);
 
 //  에러 핸들러
 app.use((err, req, res, next) => {
@@ -67,19 +77,16 @@ app.use((err, req, res, next) => {
 });
 //
 
+/*
 mongoose
-  .connect("mongodb://localhost:27017/messages")
+  .connect('mongodb://localhost:27017/messages')
   .then((result) => {
     const server = app.listen(8080, () => {
       console.log(`server is listening >>> localhost:8080`);
     });
-    const io = require(`socket.io`)(server);
-    io.on(`connection`, (socket) => {
-      console.log(`client connectd`);
-    });
   })
   .catch((err) => console.log(err));
-
+*/
 /*
 mongoose
   .connect(
@@ -97,8 +104,6 @@ mongoose
   .catch((err) => console.log(err));
 */
 
-/*
 app.listen(8080, () => {
   console.log(`server is listening >>> localhost:8080`);
 });
-*/
